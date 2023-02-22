@@ -105,8 +105,8 @@ STROUT  equ $DB3A       ;
 LINPRT  equ $ED24       ; Converts the unsigned hexadecimal number in X (low) and A (high) into a decimal number and displays it.
 *
 ***********************    my equ  ***********************
-bitmap1  equ $2000      ; $2000 -> $4FFF (bitmap index 1) => aux mem.
-bitmap2  equ $5500      ; $5000 -> $7FFF (bitmap index 2) => aux mem.
+bitmap1  equ $2000      ; $2000 -> $5FFF (bitmap index 1) => aux mem.
+bitmap2  equ $6000      ; $6000 -> $9FFF (bitmap index 2) => aux mem.
 indexrl  equ $2000      ; loads RLE index here  => main mem.
 ptr1     equ $06        ;
 ptr2     equ $08
@@ -115,18 +115,18 @@ pbline  equ $03         ; # of text line for progressbar
 pbchar  equ #'-'        ; char for progressbar
 pbora   equ #$80        ; char bit 7 for progressbar
 ;indexlength     equ $2F27  ; = lengh of uncompressed index file + 1
-indexlength     equ $323A  ; = lengh of uncompressed index file + 1
+indexlength equ $311D   ; = lengh of uncompressed index file + 1
 
 *
 ********************  memory org.  ***********************
 * 402328 words | 4 parts of 100582 words |
 * full bit table : 50291 bytes | 
-* Partial bit table (1/4) : 12573 bytes
+* Partial bit table (1/4) : 12573 bytes = $311D, from $2000 to $79D8
 
 * program : $1000 (main AND aux memory, using AUXMOV)
 * RLE index file loading address : $2000 (main memory) => < $8200 (for biggest RLE file )
-* bitmap1 (for uncompressed RLE index file): $2000 -> $4FFF (aux memory)  
-* bitmap2 (for uncompressed RLE index file): $5000 -> $7FFF (aux memory)
+* bitmap1 (for uncompressed RLE index file): $2000 -> $5FFF (aux memory)  
+* bitmap2 (for uncompressed RLE index file): $6000 -> $9FFF (aux memory)
 * buffer for OPEN MLI call (1024 bytes), RLE files : $8400
 * buffer for OPEN MLI call (1024 bytes), WORDS files : $8800
 *
@@ -135,26 +135,26 @@ indexlength     equ $323A  ; = lengh of uncompressed index file + 1
         put mac.s
         org $1000
 
-init    equ *
+start   equ *
+        jsr copymaintoaux  ; copy program in aux mem at same address, using AUXMOV
+        jsr ramout      ; disconnect /RAM disk if any
+        jsr doprefix    ; set prefix
         cld
         ;lda #$3
         ;jsr OUTPORT    ; 80 col.
         ; lda #$15      ; 40 cols, Character that turns off video firmware (ProDOS technical reference)
         jsr $C300       ; 80 col. (http://www.deater.net/weave/vmwprod/demos/sizecoding.html)
-        jsr text        ; text mode
+
+init   
+        jsr text        ; init text mode
         jsr home        ; clear screen + cursor to upper left corner
-        jsr ramout      ; disconnect /RAM disk if any
         printc titlelib ; display title of program
         cr              ; print return (macro)
         lda #$00
         sta $BF94
         closef #$00     ; close all files
-
-* set prefix
-        jsr doprefix    ; set prefix
         prnstr path     ; display prefix
         cr
-
         prnstr patternlib       ; print label 
         jsr mygetln     ; let user type pattern
         jsr testpat     ; test if letter(s) in partter, set noletter var 
@@ -173,9 +173,7 @@ exit2   rts             ; end of program
 okpat   cr
         cr
 *
-********************  init  **********************
-        jsr copymaintoaux  ; copy program in aux mem at same address, using AUXMOV
-
+********************  init vars **********************
         lda #$00        ; init. total counter (sum of counters for 4 parts, 3 bytes integer)
         sta totalcnt    
         sta totalcnt+1
@@ -221,7 +219,7 @@ eop     jsr dowait      ; wait for a pressed key
 progressbar
         lda #pbline     ; get line # for progressbar
         jsr bascalc     ; get base address 
-        lda pbpos       ; get last h positino
+        lda pbpos       ; get last h position
         clc             ; add it to pointer
         adc basl
         sta basl
@@ -333,10 +331,10 @@ updatetotcnt            ; add counter to totalcnt (3 bytes integers)
         rts
 *
 copymaintoaux           ; copy program to AUX memory
-        lda #>init
+        lda #>start
         sta $3d         ; source high
         sta $43         ; dest high
-        lda #<init      
+        lda #<start      
         sta $3c         ; source low
         sta $42         ; dest low
         lda #>prgend    ; source end low
@@ -356,9 +354,9 @@ copyindextomain         ; copyfrom AUX to MAIN , same address, length=index bitm
         sta $42         ; dest low 
         lda $3c 
         clc
-        ;adc #$27        ; add length to source  (+12071 bytes)
-        adc #<indexlength
-        sta $3e
+
+        adc #<indexlength       ; set length to move 
+        sta $3e         ; add index length +1
         lda $3d
         adc #>indexlength 
         sta $3f
@@ -459,15 +457,13 @@ updateptr
         bne noincp1
         inc ptr1+1
 noincp1
-        lda ptr1        ; 12071 bytes (length of index) to scan + 1 (because of inc) = $2F28
-        ;cmp #$2F + #$20
         ;cmp #>indexlength  + #$20
-        cmp 
+        lda ptr1+1
+        cmp #$31+#$20        ; hi byte of indexlength ($31) + $20 (hi b. of bmp1)
         bne loopcount
-        ;cmp #$28        ; from $2000 to $2000+$2F28 = $4F28 = 12071  + 1
+        lda ptr1
         cmp #<indexlength
         bne loopcount
-        lda ptr1+1
         rts
 
 ******************* AND *******************
@@ -496,11 +492,9 @@ ni      inc ptr2
         bne ni2
         inc ptr2+1
 ni2     lda ptr1+1
-        ;cmp #$4f        ; area is $2F27 long (and strats at $2000)
-        cmp #>indexlength
+        cmp #$31+#$20   ; area is $311D long and strats at $2000
         bne andloop
         lda ptr1
-        ;cmp #$28
         cmp #<indexlength
         bne andloop
         sta RAMRDOFF
@@ -699,8 +693,9 @@ noletter ds 1
 
 
 
-fillmem                 ; fill bitmap1 ($2000 in aux memory) with $ff
-                        ; fill bitmap2 ($5000-$8000) with $00
+fillmem                 ; fill bitmap1 ($2000 -> $2000 + indexlength in aux memory) with $ff
+                        ; fill bitmap2 ($6000-$9FFF in aux memory) with $00
+
         lda #<bitmap1   ; set bitamp1 address in ptr2 (destination)
         sta ptr2
         lda #>bitmap1
@@ -716,18 +711,18 @@ fill    sta (ptr2),y
         inc ptr2+1 
 noincf  
         ldx ptr2+1 
-        ;cpx #$4f      ; $4F28 reached ? (= length of index (12 071) +1)
-        cpx #<indexlength
+        ;cpx #>indexlength + #$bitamp1
+        cpx #$32+#$20
         bne fill
         ldx ptr2
         ;cpx #$28
-        cpx #>indexlength
+        cpx #<indexlength
         bne fill
         jsr zerobmap2   ; now empty $5000-$8000 area (bitmap2 area)
         sta RAMWRTOFF
         rts
 
-zerobmap2               ; fill $5000-$8000 with 0
+zerobmap2               ; fill $6000-$9FFF with 0
         lda #<bitmap2   ; set bitamp2 address in ptr2 (destination)
         sta ptr2
         lda #>bitmap2
@@ -739,7 +734,7 @@ fill0   sta (ptr2),y
         bne noincf0
         inc ptr2+1 
 noincf0 ldx ptr2+1 
-        cpx #$90        ; $9000 reached ?
+        cpx #$A0        ; $9000 reached ?
         bne fill0
         rts   
 

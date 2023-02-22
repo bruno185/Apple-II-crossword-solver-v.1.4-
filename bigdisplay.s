@@ -143,11 +143,12 @@ eoword3
         inc ptr1+1
 noinc2  
         lda ptr1        ; 12071 byte to scan  + 1 (because of inc) = $2F28
-        cmp #$28        ; from $2000 to $2000+$2F28 = $4F28
+        ;cmp #$28        ; from $2000 to $2000+$2F28 = $4F28
+        cmp #<indexlength ; from $2000 to $2000+$311D = $511D
         beq chechhi
         jmp loopreadbyte
 chechhi lda ptr1+1
-        cmp #$2F + #$20
+        cmp #$31 + #$20
         beq dispexit
         jmp loopreadbyte
 dispexit
