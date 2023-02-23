@@ -147,7 +147,7 @@ start   equ *
         jsr $C300       ; 80 col. (http://www.deater.net/weave/vmwprod/demos/sizecoding.html)
 
 init   
-        jsr text        ; init text mode
+        jsr text        ; init text mode, clear margins
         jsr home        ; clear screen + cursor to upper left corner
         printc titlelib ; display title of program
         cr              ; print return (macro)
