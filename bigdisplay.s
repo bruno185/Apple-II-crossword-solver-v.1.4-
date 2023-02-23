@@ -11,9 +11,9 @@ adjustcnt
 * adjust wordscnt because last byte of a part is not significant partly
         ldy part
         dey
-        beq go  ; part 1 : let wordscnt be 0
+        beq go          ; part 1 : let wordscnt be 0
 
-        lda #$01        ; add $188E6 (=100582) to counter
+        lda #$01        ; add $188E6 to counter (=100582 = 1/4 of words) 
         sta wordscnt+2
         lda #$88
         sta wordscnt+1

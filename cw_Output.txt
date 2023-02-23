@@ -232,7 +232,7 @@
   232 |  1         cw.s    160 | Code        | 11 |         |    3 | 00/1092 : 20 6D 14    |                  jsr     testpat        ; test if letter(s) in partter, set noletter var
   233 |  1         cw.s    161 | Code        | 11 |         |    3 | 00/1095 : AD 55 1A    |                  lda     quitflag       ; if ctrl-c or escape then quitflag > 0
   234 |  1         cw.s    162 | Code        | 11 |         |    2 | 00/1098 : D0 23       |                  bne     exit2          ; yes : exit program
-  235 |  1         cw.s    163 | Code        | 11 |         |    3 | 00/109A : AD FC 1A    |                  lda     pattern        ; get pattern length
+  235 |  1         cw.s    163 | Code        | 11 |         |    3 | 00/109A : AD 05 1B    |                  lda     pattern        ; get pattern length
   236 |  1         cw.s    164 | Code        | 11 |         |    2 | 00/109D : C9 02       |                  cmp     #$02           ; pattern length msut be >= 2
   237 |  1         cw.s    165 | Code        | 11 |         |    2 | 00/109F : 10 1D       |                  bpl     okpat          
   238 |  1         cw.s    166 | Macro       | 11 |         |    0 | 00/10A1               |                  cr                     
@@ -352,7 +352,7 @@
   352 |  1         cw.s    257 | Comment     | 11 |         |    0 | 00/1168               |                         ; yes : search (full process)
   353 |  1         cw.s    258 | Code        | 11 |         |    3 | 00/1168 : AE 52 1A    |                  ldx     pos            ; x =  position in pattern
   354 |  1         cw.s    259 | Code        | 11 |         |    1 | 00/116B : CA          |                  dex                    ; adjust (x must start from 0, pos start from 1)
-  355 |  1         cw.s    260 | Code        | 11 |         |    3 | 00/116C : BD FD 1A    |                  lda     pattern+1,x    ; get char from pattern
+  355 |  1         cw.s    260 | Code        | 11 |         |    3 | 00/116C : BD 06 1B    |                  lda     pattern+1,x    ; get char from pattern
   356 |  1         cw.s    261 | Code        | 11 |         |    2 | 00/116F : C9 41       |                  cmp     #'A'           ; char between A and  Z ?
   357 |  1         cw.s    262 | Code        | 11 |         |    2 | 00/1171 : 90 13       |                  bcc     bloopnext      ; no : next char in pattern
   358 |  1         cw.s    263 | Code        | 11 |         |    2 | 00/1173 : C9 5B       |                  cmp     #'Z'+1         
@@ -369,7 +369,7 @@
   369 |  1         cw.s    274 | Code        | 11 |         |    3 | 00/1186 : EE 52 1A    |                  inc     pos            ; next char in pattern
   370 |  1         cw.s    275 | Code        | 11 |         |    3 | 00/1189 : AE 52 1A    |                  ldx     pos            
   371 |  1         cw.s    276 | Code        | 11 |         |    1 | 00/118C : CA          |                  dex                    
-  372 |  1         cw.s    277 | Code        | 11 |         |    3 | 00/118D : EC FC 1A    |                  cpx     pattern        ; end of pattern (1st char = length)
+  372 |  1         cw.s    277 | Code        | 11 |         |    3 | 00/118D : EC 05 1B    |                  cpx     pattern        ; end of pattern (1st char = length)
   373 |  1         cw.s    278 | Code        | 11 |         |    2 | 00/1190 : D0 D1       |                  bne     bigll          ; no : loop
   374 |  1         cw.s    279 | Code        | 11 |         |    1 | 00/1192 : 60          |                  rts                    
   375 |  1         cw.s    280 | Comment     | 11 |         |    0 | 00/1193               | * end bigloop
@@ -385,7 +385,7 @@
   385 |  1         cw.s    290 | Code        | 11 |         |    3 | 00/119F : 8D F0 17    |                  sta     fname+2        
   386 |  1         cw.s    291 | Code        | 11 |         |    2 | 00/11A2 : A9 4C       |                  lda     #'L'           ; L is first char of filename
   387 |  1         cw.s    292 | Code        | 11 |         |    3 | 00/11A4 : 8D F1 17    |                  sta     fname+3        
-  388 |  1         cw.s    293 | Code        | 11 |         |    3 | 00/11A7 : AE FC 1A    |                  ldx     pattern        ; pattern string length = length of words to find
+  388 |  1         cw.s    293 | Code        | 11 |         |    3 | 00/11A7 : AE 05 1B    |                  ldx     pattern        ; pattern string length = length of words to find
   389 |  1         cw.s    294 | Code        | 11 |         |    3 | 00/11AA : BD 41 1A    |                  lda     tohex,x        
   390 |  1         cw.s    295 | Code        | 11 |         |    3 | 00/11AD : 8D F2 17    |                  sta     fname+4        
   391 |  1         cw.s    296 | Code        | 11 |         |    2 | 00/11B0 : A9 50       |                  lda     #'P'           ; part suffix
@@ -418,10 +418,10 @@
   418 |  1         cw.s    313 | Code        | 11 |         |    2 | 00/11E5 : D0 F4       |                  bne     ozunid_19      
   419 |  1         cw.s    313 | Empty       | 11 |         |    0 | 00/11E7               | ozunid_20                               
   420 |  1         cw.s    314 | Macro       | 11 |         |    0 | 00/11E7               |                  prnstr  pattern        
-  421 |  1         cw.s    314 | Code        | 11 |         |    3 | 00/11E7 : AC FC 1A    |                  ldy     pattern        
+  421 |  1         cw.s    314 | Code        | 11 |         |    3 | 00/11E7 : AC 05 1B    |                  ldy     pattern        
   422 |  1         cw.s    314 | Code        | 11 |         |    2 | 00/11EA : F0 0E       |                  beq     ozunid_22      ; no char.
   423 |  1         cw.s    314 | Code        | 11 |         |    2 | 00/11EC : A2 00       |                  ldx     #$00           
-  424 |  1         cw.s    314 | Code        | 11 |         |    3 | 00/11EE : BD FD 1A    | ozunid_21        lda     pattern+1,X    
+  424 |  1         cw.s    314 | Code        | 11 |         |    3 | 00/11EE : BD 06 1B    | ozunid_21        lda     pattern+1,X    
   425 |  1         cw.s    314 | Code        | 11 |         |    2 | 00/11F1 : 09 80       |                  ora     #$80           
   426 |  1         cw.s    314 | Code        | 11 |         |    3 | 00/11F3 : 20 ED FD    |                  jsr     {$FDED}        
   427 |  1         cw.s    314 | Code        | 11 |         |    1 | 00/11F6 : E8          |                  inx                    
@@ -466,7 +466,7 @@
   466 |  1         cw.s    339 | Code        | 11 |         |    2 | 00/123B : 85 42       |                  sta     $42            ; dest low
   467 |  1         cw.s    340 | Code        | 11 |         |    2 | 00/123D : A9 1B       |                  lda     #>{ozunid_2}   ; source end low
   468 |  1         cw.s    341 | Code        | 11 |         |    2 | 00/123F : 85 3F       |                  sta     $3f            
-  469 |  1         cw.s    342 | Code        | 11 |         |    2 | 00/1241 : A9 0D       |                  lda     #<{ozunid_2}   ; source end high
+  469 |  1         cw.s    342 | Code        | 11 |         |    2 | 00/1241 : A9 16       |                  lda     #<{ozunid_2}   ; source end high
   470 |  1         cw.s    343 | Code        | 11 |         |    2 | 00/1243 : 85 3E       |                  sta     $3e            
   471 |  1         cw.s    344 | Code        | 11 |         |    1 | 00/1245 : 38          |                  sec                    ; main to aux
   472 |  1         cw.s    345 | Code        | 11 |         |    3 | 00/1246 : 20 11 C3    |                  jsr     {$C311}        ; move
@@ -739,7 +739,7 @@
   739 |  1         cw.s    612 | Comment     | 11 |         |    0 | 00/13EF               |                         ; return : commit
   740 |  1         cw.s    613 | Comment     | 11 |         |    0 | 00/13EF               |                         ; delete : delete last char
   741 |  1         cw.s    614 | Code        | 11 |         |    2 | 00/13EF : A9 00       |                  lda     #$00           
-  742 |  1         cw.s    615 | Code        | 11 |         |    3 | 00/13F1 : 8D FC 1A    |                  sta     pattern        ; pattern length = 0
+  742 |  1         cw.s    615 | Code        | 11 |         |    3 | 00/13F1 : 8D 05 1B    |                  sta     pattern        ; pattern length = 0
   743 |  1         cw.s    616 | Code        | 11 |         |    3 | 00/13F4 : 8D 55 1A    |                  sta     quitflag       
   744 |  1         cw.s    617 | Empty       | 11 |         |    0 | 00/13F7               |                                         
   745 |  1         cw.s    618 | Empty       | 11 |         |    0 | 00/13F7               | readkeyboard                            
@@ -767,7 +767,7 @@
   767 |  1         cw.s    640 | Code        | 11 |         |    2 | 00/1420 : C9 5B       |                  cmp     #'Z'+1         
   768 |  1         cw.s    641 | Code        | 11 |         |    2 | 00/1422 : B0 D3       |                  bcs     readkeyboard   ; > Z : loop
   769 |  1         cw.s    642 | Empty       | 11 |         |    0 | 00/1424               | okchar                                  
-  770 |  1         cw.s    643 | Code        | 11 |         |    3 | 00/1424 : AC FC 1A    |                  ldy     pattern        ; pattern must not exceed 15 chars
+  770 |  1         cw.s    643 | Code        | 11 |         |    3 | 00/1424 : AC 05 1B    |                  ldy     pattern        ; pattern must not exceed 15 chars
   771 |  1         cw.s    644 | Code        | 11 |         |    2 | 00/1427 : C0 0F       |                  cpy     #$0f           
   772 |  1         cw.s    645 | Code        | 11 |         |    2 | 00/1429 : F0 CC       |                  beq     readkeyboard   
   773 |  1         cw.s    646 | Code        | 11 |         |    1 | 00/142B : 48          |                  pha                    ; save char
@@ -775,16 +775,16 @@
   775 |  1         cw.s    648 | Code        | 11 |         |    3 | 00/142E : 20 ED FD    |                  jsr     {$FDED}        
   776 |  1         cw.s    649 | Code        | 11 |         |    3 | 00/1431 : AD 7B 05    |                  lda     {$57B}         ; get horizontal position
   777 |  1         cw.s    650 | Code        | 11 |         |    3 | 00/1434 : 8D 54 1A    |                  sta     savech         ; save it
-  778 |  1         cw.s    651 | Code        | 11 |         |    3 | 00/1437 : EE FC 1A    |                  inc     pattern        ; pattern length ++
+  778 |  1         cw.s    651 | Code        | 11 |         |    3 | 00/1437 : EE 05 1B    |                  inc     pattern        ; pattern length ++
   779 |  1         cw.s    652 | Code        | 11 |         |    1 | 00/143A : 68          |                  pla                    ; restore char
-  780 |  1         cw.s    653 | Code        | 11 |         |    3 | 00/143B : AE FC 1A    |                  ldx     pattern        ; poke if in pattern string
-  781 |  1         cw.s    654 | Code        | 11 |         |    3 | 00/143E : 9D FC 1A    |                  sta     pattern,x      
+  780 |  1         cw.s    653 | Code        | 11 |         |    3 | 00/143B : AE 05 1B    |                  ldx     pattern        ; poke if in pattern string
+  781 |  1         cw.s    654 | Code        | 11 |         |    3 | 00/143E : 9D 05 1B    |                  sta     pattern,x      
   782 |  1         cw.s    655 | Code        | 11 |         |    3 | 00/1441 : 2C 10 C0    |                  bit     {$C010}        ; clear kbd
   783 |  1         cw.s    656 | Code        | 11 |         |    3 | 00/1444 : 4C F7 13    |                  jmp     readkeyboard   ; next char
   784 |  1         cw.s    657 | Comment     | 11 |         |    0 | 00/1447               | ; delete key
-  785 |  1         cw.s    658 | Code        | 11 |         |    3 | 00/1447 : AD FC 1A    | delete           lda     pattern        ; get pattern length
+  785 |  1         cw.s    658 | Code        | 11 |         |    3 | 00/1447 : AD 05 1B    | delete           lda     pattern        ; get pattern length
   786 |  1         cw.s    659 | Code        | 11 |         |    2 | 00/144A : F0 AB       |                  beq     readkeyboard   ; if 0 just loop
-  787 |  1         cw.s    660 | Code        | 11 |         |    3 | 00/144C : CE FC 1A    |                  dec     pattern        ; pattern lenth --
+  787 |  1         cw.s    660 | Code        | 11 |         |    3 | 00/144C : CE 05 1B    |                  dec     pattern        ; pattern lenth --
   788 |  1         cw.s    661 | Code        | 11 |         |    3 | 00/144F : AD 54 1A    |                  lda     savech         ; savech --
   789 |  1         cw.s    662 | Code        | 11 |         |    1 | 00/1452 : 3A          |                  dec                    
   790 |  1         cw.s    663 | Code        | 11 |         |    3 | 00/1453 : 8D 7B 05    |                  sta     {$57B}         ; update h position
@@ -802,8 +802,8 @@
   802 |  1         cw.s    675 | Empty       | 11 |         |    0 | 00/146D               |                                         
   803 |  1         cw.s    676 | Empty       | 11 |         |    0 | 00/146D               |                                         
   804 |  1         cw.s    677 | Empty       | 11 |         |    0 | 00/146D               | testpat                                 ; test if pattern only contains '?'
-  805 |  1         cw.s    678 | Code        | 11 |         |    3 | 00/146D : AE FC 1A    |                  ldx     pattern        
-  806 |  1         cw.s    679 | Code        | 11 |         |    3 | 00/1470 : BD FC 1A    | looptp           lda     pattern,x      ; get a char from pattern
+  805 |  1         cw.s    678 | Code        | 11 |         |    3 | 00/146D : AE 05 1B    |                  ldx     pattern        
+  806 |  1         cw.s    679 | Code        | 11 |         |    3 | 00/1470 : BD 05 1B    | looptp           lda     pattern,x      ; get a char from pattern
   807 |  1         cw.s    680 | Code        | 11 |         |    2 | 00/1473 : C9 3F       |                  cmp     #'?'           
   808 |  1         cw.s    681 | Code        | 11 |         |    2 | 00/1475 : D0 09       |                  bne     letterfound    ; a char is <> from '?'
   809 |  1         cw.s    682 | Code        | 11 |         |    1 | 00/1477 : CA          |                  dex                    
@@ -1078,7 +1078,7 @@
  1078 |  3 bigdisplay.S     13 | Code        | 11 |         |    1 | 00/1627 : 88          |                  dey                    
  1079 |  3 bigdisplay.S     14 | Code        | 11 |         |    2 | 00/1628 : F0 2E       |                  beq     go             ; part 1 : let wordscnt be 0
  1080 |  3 bigdisplay.S     15 | Empty       | 11 |         |    0 | 00/162A               |                                         
- 1081 |  3 bigdisplay.S     16 | Code        | 11 |         |    2 | 00/162A : A9 01       |                  lda     #$01           ; add $188E6 (=100582) to counter
+ 1081 |  3 bigdisplay.S     16 | Code        | 11 |         |    2 | 00/162A : A9 01       |                  lda     #$01           ; add $188E6 to counter (=100582 = 1/4 of words)
  1082 |  3 bigdisplay.S     17 | Code        | 11 |         |    3 | 00/162C : 8D 40 1A    |                  sta     wordscnt+2     
  1083 |  3 bigdisplay.S     18 | Code        | 11 |         |    2 | 00/162F : A9 88       |                  lda     #$88           
  1084 |  3 bigdisplay.S     19 | Code        | 11 |         |    3 | 00/1631 : 8D 3F 1A    |                  sta     wordscnt+1     
@@ -1105,9 +1105,9 @@
  1105 |  3 bigdisplay.S     40 | Comment     | 11 |         |    0 | 00/165D               | *** WORDS file
  1106 |  3 bigdisplay.S     41 | Code        | 11 |         |    3 | 00/165D : 20 4A 12    |                  jsr     copyindextomain; copy index to main
  1107 |  3 bigdisplay.S     42 | Empty       | 11 |         |    0 | 00/1660               |                                         
- 1108 |  3 bigdisplay.S     43 | Code        | 11 |         |    3 | 00/1660 : AE F6 1A    |                  ldx     words          ; open WORDS file
+ 1108 |  3 bigdisplay.S     43 | Code        | 11 |         |    3 | 00/1660 : AE FF 1A    |                  ldx     words          ; open WORDS file
  1109 |  3 bigdisplay.S     44 | Code        | 11 |         |    3 | 00/1663 : 8E EE 17    |                  stx     fname          ; copy file name from to fname mli parameter
- 1110 |  3 bigdisplay.S     45 | Code        | 11 |         |    3 | 00/1666 : BD F6 1A    | copyfn           lda     words,x        
+ 1110 |  3 bigdisplay.S     45 | Code        | 11 |         |    3 | 00/1666 : BD FF 1A    | copyfn           lda     words,x        
  1111 |  3 bigdisplay.S     46 | Code        | 11 |         |    3 | 00/1669 : 9D EE 17    |                  sta     fname,x        
  1112 |  3 bigdisplay.S     47 | Code        | 11 |         |    1 | 00/166C : CA          |                  dex                    
  1113 |  3 bigdisplay.S     48 | Code        | 11 |         |    2 | 00/166D : D0 F7       |                  bne     copyfn         
@@ -1121,7 +1121,7 @@
  1121 |  3 bigdisplay.S     56 | Data        | 11 |         |    2 | 00/167D : E8 17       |                  da      c8_parms       
  1122 |  3 bigdisplay.S     57 | Empty       | 11 |         |    0 | 00/167F               |                                         
  1123 |  3 bigdisplay.S     58 | Code        | 11 |         |    3 | 00/167F : AD ED 17    |                  lda     ref            
- 1124 |  3 bigdisplay.S     59 | Code        | 11 |         |    3 | 00/1682 : 8D 0C 1B    |                  sta     refword        ; save ref ID of WORDS file.
+ 1124 |  3 bigdisplay.S     59 | Code        | 11 |         |    3 | 00/1682 : 8D 15 1B    |                  sta     refword        ; save ref ID of WORDS file.
  1125 |  3 bigdisplay.S     60 | Empty       | 11 |         |    0 | 00/1685               |                                         
  1126 |  3 bigdisplay.S     61 | Comment     | 11 |         |    0 | 00/1685               | *** process index 
  1127 |  3 bigdisplay.S     62 | Code        | 11 |         |    2 | 00/1685 : A9 20       |                  lda     #>{$2000}      ; set pointer to $2000 area
@@ -1162,7 +1162,7 @@
  1162 |  3 bigdisplay.S     97 | Code        | 11 |         |    1 | 00/16C4 : CA          |                  dex                    
  1163 |  3 bigdisplay.S     98 | Code        | 11 |         |    2 | 00/16C5 : D0 F4       |                  bne     mul16wc        
  1164 |  3 bigdisplay.S     99 | Empty       | 11 |         |    0 | 00/16C7               |                                         
- 1165 |  3 bigdisplay.S    100 | Code        | 11 |         |    3 | 00/16C7 : AD 0C 1B    |                  lda     refword        ; copy file ID to set-mark call param
+ 1165 |  3 bigdisplay.S    100 | Code        | 11 |         |    3 | 00/16C7 : AD 15 1B    |                  lda     refword        ; copy file ID to set-mark call param
  1166 |  3 bigdisplay.S    101 | Code        | 11 |         |    3 | 00/16CA : 8D FF 17    |                  sta     refce          ; to set-mark call param
  1167 |  3 bigdisplay.S    102 | Code        | 11 |         |    3 | 00/16CD : 8D 04 18    |                  sta     refread        ; and to read call param
  1168 |  3 bigdisplay.S    103 | Code        | 11 |         |    3 | 00/16D0 : 20 00 BF    |                  jsr     {$BF00}        ; set_mark call
@@ -1635,7 +1635,7 @@
       |                        |             |    |         |      |           74 65 72 6E |
       |                        |             |    |         |      |           20 3A 20    |
  1480 |  1         cw.s   1128 | Data        | 11 |         |    4 | 00/1AC8 : 03 20 3A 20 | seplib           str     ' : '          
- 1481 |  1         cw.s   1129 | Data        | 11 |         |   41 | 00/1ACC : 20 43 20 52 | titlelib         asc     ' C R O S S W ? R D   S O L V E R (v. 1.4)'
+ 1481 |  1         cw.s   1129 | Data        | 11 |         |   50 | 00/1ACC : 20 43 20 52 | titlelib         asc     ' C R O S S W ? R D   S O L V E R (v. 1.4 - French)'
       |                        |             |    |         |      |           20 4F 20 53 |
       |                        |             |    |         |      |           20 53 20 57 |
       |                        |             |    |         |      |           20 3F 20 52 |
@@ -1645,18 +1645,20 @@
       |                        |             |    |         |      |           20 45 20 52 |
       |                        |             |    |         |      |           20 28 76 2E |
       |                        |             |    |         |      |           20 31 2E 34 |
-      |                        |             |    |         |      |           29          |
- 1482 |  1         cw.s   1130 | Data        | 11 |         |    1 | 00/1AF5 : 00          |                  hex     00             
- 1483 |  1         cw.s   1131 | Empty       | 11 |         |    0 | 00/1AF6               |                                         
- 1484 |  1         cw.s   1132 | Data        | 11 |         |    6 | 00/1AF6 : 05 57 4F 52 | words            str     'WORDS'        
+      |                        |             |    |         |      |           20 2D 20 46 |
+      |                        |             |    |         |      |           72 65 6E 63 |
+      |                        |             |    |         |      |           68 29       |
+ 1482 |  1         cw.s   1130 | Data        | 11 |         |    1 | 00/1AFE : 00          |                  hex     00             
+ 1483 |  1         cw.s   1131 | Empty       | 11 |         |    0 | 00/1AFF               |                                         
+ 1484 |  1         cw.s   1132 | Data        | 11 |         |    6 | 00/1AFF : 05 57 4F 52 | words            str     'WORDS'        
       |                        |             |    |         |      |           44 53       |
- 1485 |  1         cw.s   1133 | Empty       | 11 |         |    0 | 00/1AFC               |                                         
- 1486 |  1         cw.s   1134 | Data        | 11 |         |   16 | 00/1AFC : 00 00 00 00 | pattern          ds      16             
+ 1485 |  1         cw.s   1133 | Empty       | 11 |         |    0 | 00/1B05               |                                         
+ 1486 |  1         cw.s   1134 | Data        | 11 |         |   16 | 00/1B05 : 00 00 00 00 | pattern          ds      16             
       |                        |             |    |         |      |           00 00 00 00 |
       |                        |             |    |         |      |           00 00 00 00 |
       |                        |             |    |         |      |           00 00 00 00 |
- 1487 |  1         cw.s   1135 | Data        | 11 |         |    1 | 00/1B0C : 00          | refword          ds      1              
- 1488 |  1         cw.s   1136 | Comment     | 11 |         |    0 | 00/1B0D               | **************************************************
- 1489 |  1         cw.s   1137 | Empty       | 11 |         |    0 | 00/1B0D               | ozunid_2                                
- 1490 |  1         cw.s   1137 | Equivalence | 11 |         |    0 | 00/1B0D               | prgend           equ     ozunid_2       
+ 1487 |  1         cw.s   1135 | Data        | 11 |         |    1 | 00/1B15 : 00          | refword          ds      1              
+ 1488 |  1         cw.s   1136 | Comment     | 11 |         |    0 | 00/1B16               | **************************************************
+ 1489 |  1         cw.s   1137 | Empty       | 11 |         |    0 | 00/1B16               | ozunid_2                                
+ 1490 |  1         cw.s   1137 | Equivalence | 11 |         |    0 | 00/1B16               | prgend           equ     ozunid_2       
 ------+------------------------+-------------+----+---------+------+-----------------------+-------------------------------------------------------------------

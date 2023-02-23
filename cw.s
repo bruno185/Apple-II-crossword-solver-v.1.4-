@@ -1126,7 +1126,7 @@ patternlib      str 'Enter pattern (A-Z and ?) : '
 kopatlib        str 'Error in pattern !'
 patlib          str 'Pattern : '
 seplib          str ' : '
-titlelib        asc ' C R O S S W ? R D   S O L V E R (v. 1.4)'
+titlelib        asc ' C R O S S W ? R D   S O L V E R (v. 1.4 - French)'
                 hex 00
 
 words           str 'WORDS'
