@@ -8,8 +8,9 @@
 * version 1.0 : uses tempo files 
 * version 1.1 : get rid of tempo files, works in memory mostly.
 * version 1.2 : add a progress bar
-* version 1.4 : new word file (ods8) 402328 words <= 15 chars, + 3 chars : AIRIAL, AIRIAUX, BRIC)
-*
+* version 1.4 : 
+* => new word file (ods8) 402328 words <= 15 chars, + 3 chars : AIRIAL, AIRIAUX, BRIC)
+* => page stop (wait a key, or esc. to abort).
 *
 * IMPORTANT : 
 * The creation of index files is done with the Delphi program here :
@@ -186,6 +187,8 @@ okpat   cr
         sta col         ; init. horiz. position of resulting words 
 
         sta pbpos       ; init. progressbar in position 0
+
+        sta displayed
 
         lda #$01        ; start with part 1
         sta part
@@ -1096,7 +1099,7 @@ d1_param                ; GET_EOF
 refd1   hex 00
 filelength      ds 3
 
-**************************************************
+*********************** vars ***********************
 myfac   ds 6            ; to store tempo FAC
 counter hex 000000      ; store any counter here
 totalcnt hex 000000     ; sum of counters (4 parts) 
@@ -1116,6 +1119,7 @@ quitflag da 1
 savebit ds 1
 col     ds 1
 pbpos   ds 1
+displayed       ds 1
 
 **** strings ****
 kolib   str "Error : "
@@ -1130,6 +1134,7 @@ titlelib        asc ' C R O S S W ? R D   S O L V E R (v. 1.4 - French)'
                 hex 00
 
 words           str 'WORDS'
+presskeylib     str 'Press a any key... (or esc. to abort)'
 
 pattern ds 16
 refword ds 1

@@ -117,7 +117,28 @@ mul16wc asl filepos     ; filepos = filepos * 16 (16 char per word in words file
         da  ca_parms
 
 *** print word
-        jsr result      ; print data read in word file   
+        jsr result      ; print data read in word file
+        inc displayed   ; # of word displayed ++
+        lda displayed
+        cmp #90         ; = 90 ?
+        bne godisp      ; no : kepp on displying words
+        lda #0          ; yes : reset displayed to 0
+        sta displayed   ; save it
+        cr
+        cr
+        prnstr presskeylib
+        jsr dowait      ; wait for a key pressed
+        cmp #$9b        ; escape ?
+        bne newscreen   ; no : go on
+        tsx             ; yes : reset stack (+2)
+        inx             ; to avoid stack overflow
+        inx 
+        txs 
+        jmp init        ; and go to beginning of program
+newscreen
+        jsr home        ; clear screen
+
+godisp
         lda col         ; adjust position on screen for next word
         cmp #64         ; 64 horizontal = last posiotn on line           
         beq lastcol     
@@ -125,7 +146,10 @@ mul16wc asl filepos     ; filepos = filepos * 16 (16 char per word in words file
         adc #16         ; move horizontal posiiton 16 rows to the right 
         jmp outscr
 lastcol                 
+        lda displayed   ; if displayed = 0 (beginning of screen) then non cr
+        beq nocr 
         cr              ; last horizontal posiiton on screen
+nocr
         lda #$00        ; reset horizontal posiiton    
 outscr  sta col         ; store in col var
         sta ourch       ; set value for rom/prodos routine
@@ -133,8 +157,9 @@ outscr  sta col         ; store in col var
 eoword  
         jsr incwrdcnt
         dec savebit 
-        bne dolsr
-        jmp eoword3
+        beq lsrok
+        jmp dolsr
+lsrok   jmp eoword3
 *** end of LSR loop 
 
 eoword3       
