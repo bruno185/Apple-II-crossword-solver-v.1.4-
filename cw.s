@@ -12,7 +12,7 @@
 * => new word file (ods8) 402328 words <= 15 chars, + 3 chars : AIRIAL, AIRIAUX, BRIC)
 * => page stop (wait a key, or esc. to abort).
 *
-* IMPORTANT : 
+* IMPORTANT :  
 * The creation of index files is done with the Delphi program here :
 * https://github.com/bruno185/Make-index-for-Apple-II-crossword-solver
 *
